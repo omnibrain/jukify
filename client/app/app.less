@@ -9,13 +9,61 @@
  */
 
 .browsehappy {
-    margin: 0.2em 0;
-    background: #ccc;
-    color: #000;
-    padding: 0.2em 0;
+	margin: 0.2em 0;
+	background: #ccc;
+	color: #000;
+	padding: 0.2em 0;
 }
 
 // injector
+@import 'jukebox/jukebox.less';
 @import 'main/main.less';
 @import 'modal/modal.less';
 // endinjector
+
+
+// Twitter Bootstrap Callouts
+.bs-callout {
+	padding: 20px;
+	margin: 20px 0;
+	border: 1px solid #eee;
+	border-left-width: 5px;
+	border-radius: 3px;
+}
+
+.bs-callout h4 {
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+
+.bs-callout p:last-child {
+	margin-bottom: 0;
+	color: @text-color;
+}
+
+.bs-callout code {
+	border-radius: 3px;
+}
+
+.bs-callout+.bs-callout {
+	margin-top: -5px;
+}
+
+.bs-mixin(@name, @callout-color, @font-color) {
+	.@{name},
+	&.@{name} h4 {
+		border-left-color: @callout-color;
+		color: @font-color;
+		&:hover {
+			background-color: darken(@body-bg, 5%);
+			cursor: pointer;
+		}
+	}
+}
+
+.bs-mixin(bs-callout-default, @gray-lighter, darken(@gray-lighter, 50%));
+.bs-mixin(bs-callout-primary, @brand-primary, @brand-primary);
+.bs-mixin(bs-callout-info, @brand-info, @brand-info);
+.bs-mixin(bs-callout-danger, @brand-danger, @brand-danger);
+.bs-mixin(bs-callout-warning, @brand-warning, @brand-warning);
+.bs-mixin(bs-callout-success, @brand-success, @brand-success);

@@ -39,6 +39,13 @@
       ga('create', 'UA-XXXXX-X');
       ga('send', 'pageview');
     </script>
+		<!--Google Maps Api-->
+		<!--<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key=AIzaSyBgleWqUfp-lntPpe8qVL7iJcLmQVQqrIs&sensor=true"></script>-->
+		<script>
+			function initialize() { window.google = google; }
+			function loadScript() {  var script = document.createElement('script');  script.type = 'text/javascript';  script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp' +      '&signed_in=true&callback=initialize';  document.body.appendChild(script);}
+			window.onload = loadScript;
+		</script>
 
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -62,6 +69,7 @@
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
+          <script src="app/jukebox/jukebox.js"></script>
           <script src="app/main/main.js"></script>
           <script src="components/modal/modal.js"></script>
           <script src="components/navbar/navbar.js"></script>

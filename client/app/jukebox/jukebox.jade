@@ -1,0 +1,40 @@
+header#banner.hero-unit
+	.container
+		h1 Jukify
+		p.lead Democratic Partying
+
+.container
+	.row
+		.col-lg-12
+			h2.page-header Start a Party
+			ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='thing in awesomeThings')
+				li
+					a(href='#', tooltip='{{thing.info}}')
+						| {{thing.name}}
+						button.close(type='button', ng-click='deleteThing(thing)') ×
+	form.jukebox-form
+		.row
+			.col-md-6
+				input.input-lg.form-control(type='text', placeholder='What\'s the name of your Party?', ng-model='name')
+			.col-md-6
+				input.input-lg.form-control(type='text', placeholder='Where is your Party?', ng-model='addressRaw')
+		.row
+			.col-md-12.text-center
+				button.btn.btn-primary.btn-lg(type="submit", ng-click='addJukebox()') Let's get the Party Started!
+	.row
+		.col-lg-12
+			h2.page-header Join a Party
+	.row
+		.col-md-4(ng-repeat='jukebox in jukeboxes')
+			.bs-callout.bs-callout-primary
+				h4
+					| {{jukebox.name}}
+				p 
+					| {{jukebox.address}}
+				code
+					| 27 songs, 10 voters
+
+footer.footer
+	.container
+		p
+			| Jukify v0.1
