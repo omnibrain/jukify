@@ -28,27 +28,31 @@ header#banner.hero-unit
 	.row
 		.col-md-6
 			h2.page-header Playlist
-			.bs-callout.bs-callout-primary.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: "!played"')
+			.bs-callout.bs-callout-primary.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: {played: false}')
 				.row
-					.col-md-9
-						a(href='{{song.uri}}')
+					.col-md-2
+						img.img-circle.img-responsive(src='{{song.cover}}')
+					.col-md-8
+						a(href='{{song.uri}}', ng-click='playSong(song)')
 							h4
-								| {{song.title}}
+								| {{song.title}} #[small ({{ song.length | formatMillis }})]
 						p 
 							| {{song.artist}} - {{song.album}}
-					.col-md-3
+					.col-md-2
 						button.btn.btn-default.pull-right(ng-click='upvote(song)')
 							span
 								i.fa.fa-2x.fa-thumbs-up
 							span.votes(ng-class='(song.votes > 0) ? "text-success" : "text-danger"') {{song.votes}}
 		.col-md-6
 			h2.page-header Played Songs
-			.bs-callout.bs-callout-primary.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: "played"')
+			.bs-callout.bs-callout-default.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: {played: true}')
 				.row
-					.col-md-12
+					.col-md-2
+						img.img-circle.img-responsive(src='{{song.cover}}')
+					.col-md-10
 						a(href='{{song.uri}}')
 							h4
-								| {{song.title}}
+								| {{song.title}} #[small ({{ song.length | formatMillis }})]
 						p 
 							| {{song.artist}} - {{song.album}}
 

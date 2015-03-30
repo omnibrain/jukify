@@ -11,6 +11,7 @@ angular.module 'jukifyApp'
 			$scope.jukebox = jukebox
 			$http.post '/api/songs/q', { _jukebox: $scope.jukebox.id }
 				.success (playlist) ->
+					console.log playlist
 					$scope.playlist = playlist
 					socket.syncUpdates 'song', $scope.playlist
 	
@@ -28,17 +29,19 @@ angular.module 'jukifyApp'
 	$scope.addSong = ->
 		return if $scope.song.name = ''
 		song = $scope.song.selected
-		console.log song
 		$http.post '/api/songs',
 			title: song.name
 			album: song.album.name
 			artist: song.artists[0].name
 			length: song.duration_ms
-			uri: song.uri,
+			uri: song.uri
+			cover: song.album.images[1].url
 			_jukebox: $scope.jukebox._id
+
+	$scope.playSong = (song)->
+		song.played = true
+		$http.put '/api/songs/' + song._id, { played: true }
 	
 	$scope.upvote = (song)->
-		params =
-			votes: song.votes + 1
 		$http.put '/api/songs/' + song._id, { votes: song.votes + 1 }
 
