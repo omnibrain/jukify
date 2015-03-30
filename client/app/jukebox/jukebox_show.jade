@@ -1,0 +1,58 @@
+header#banner.hero-unit
+	.container
+		h1 Jukify
+		p.lead Democratic Partying
+
+.container
+	.row
+		.col-lg-12.text-center
+			h1(ng-bind='jukebox.name') [undefined]
+			h4(ng-bind='jukebox.address') [undefined]
+	.row
+		.col-lg-12
+			form.jukebox-form
+				.row
+					.col-md-12
+						ui-select(ng-model='song.selected', theme='bootstrap')
+							ui-select-match(placeholder='What Song do you want to hear?')
+								| {{$select.selected.name}} - {{$select.selected.artists[0].name}} - {{$select.selected.album.name}}
+							ui-select-choices(repeat='song in songs track by $index', refresh='refreshSongs($select.search)', refresh-delay='0')
+								div
+									span.strong.song-title(ng-bind-html='song.name | highlight: $select.search')
+									span.artist-name(ng-bind-html='song.artists[0].name | highlight: $select.search')
+									span.album-name(ng-bind-html='song.album.name | highlight: $select.search')
+				.row
+					.col-md-12.text-center
+						button.btn.btn-primary.btn-lg(type="submit", ng-click='addSong()') Put Song in Ballet
+
+	.row
+		.col-md-6
+			h2.page-header Playlist
+			.bs-callout.bs-callout-primary.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: "!played"')
+				.row
+					.col-md-9
+						a(href='{{song.uri}}')
+							h4
+								| {{song.title}}
+						p 
+							| {{song.artist}} - {{song.album}}
+					.col-md-3
+						button.btn.btn-default.pull-right(ng-click='upvote(song)')
+							span
+								i.fa.fa-2x.fa-thumbs-up
+							span.votes(ng-class='(song.votes > 0) ? "text-success" : "text-danger"') {{song.votes}}
+		.col-md-6
+			h2.page-header Played Songs
+			.bs-callout.bs-callout-primary.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: "played"')
+				.row
+					.col-md-12
+						a(href='{{song.uri}}')
+							h4
+								| {{song.title}}
+						p 
+							| {{song.artist}} - {{song.album}}
+
+footer.footer
+	.container
+		p
+			| Jukify v0.1

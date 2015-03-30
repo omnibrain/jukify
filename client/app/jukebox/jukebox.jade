@@ -12,21 +12,25 @@ header#banner.hero-unit
 					a(href='#', tooltip='{{thing.info}}')
 						| {{thing.name}}
 						button.close(type='button', ng-click='deleteThing(thing)') ×
-	form.jukebox-form
-		.row
-			.col-md-6
-				input.input-lg.form-control(type='text', placeholder='What\'s the name of your Party?', ng-model='name')
-			.col-md-6
-				input.input-lg.form-control(type='text', placeholder='Where is your Party?', ng-model='addressRaw')
-		.row
-			.col-md-12.text-center
-				button.btn.btn-primary.btn-lg(type="submit", ng-click='addJukebox()') Let's get the Party Started!
+			form.jukebox-form
+				.row
+					.col-md-6
+						input.input-lg.form-control(type='text', placeholder='What\'s the name of your Party?', ng-model='name')
+					.col-md-6
+						ui-select(ng-model='address.selected', theme='bootstrap')
+							ui-select-match(placeholder='Where is your party?')
+								| {{$select.selected.formatted_address}}
+							ui-select-choices(repeat='address in addresses track by $index', refresh='refreshAddresses($select.search)', refresh-delay='0')
+								div(ng-bind-html='address.formatted_address | highlight: $select.search')
+				.row
+					.col-md-12.text-center
+						button.btn.btn-primary.btn-lg(type="submit", ng-click='addJukebox()') Let's get this Party Started!
 	.row
 		.col-lg-12
-			h2.page-header Join a Party
+			h2.page-header Join a Party Near You
 	.row
 		.col-md-4(ng-repeat='jukebox in jukeboxes')
-			.bs-callout.bs-callout-primary
+			.bs-callout.bs-callout-primary.bs-callout-hover(ng-click='showJukebox(jukebox)')
 				h4
 					| {{jukebox.name}}
 				p 

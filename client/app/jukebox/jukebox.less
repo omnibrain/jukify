@@ -1,5 +1,40 @@
 .jukebox-form {
-	.btn {
+	margin-top: 40px;
+	.btn[type="submit"] {
 		margin-top: 50px;
+	}
+	.form-control {
+		height: 60px;
+		font-size: 20px;
+		padding: 15px;
+		overflow: hidden;
+	}
+
+	// dropdown when searching for songs
+	span {
+		&.song-title {
+		}
+		&.artist-name {
+			&:before {
+				font-family: @font-family-sans-serif;
+				content: "-";
+				margin: 0 6px;
+			}
+		}
+		&.album-name {
+			&:before {
+				font-family: @font-family-sans-serif;
+				content: "-";
+				margin: 0 6px;
+			}
+		}
+	}
+}
+
+.song {
+	overflow: hidden;
+	.votes {
+		font-size: 20px;
+		margin-left: 5px;
 	}
 }

@@ -1,38 +1,35 @@
 'use strict'
 
 angular.module 'jukifyApp'
-.controller 'JukeboxCtrl', ($scope, $http, socket) ->
-	console.log socket
-	$scope.songs = []
+.controller 'JukeboxCtrl', ($scope, $http, $state, socket) ->
+	$scope.jukeboxes = []
 
 	$http.get('/api/jukebox').success (jukeboxes) ->
 		$scope.jukeboxes = jukeboxes
 		socket.syncUpdates 'jukebox', $scope.jukeboxes
 
 	$scope.addJukebox = ->
-		return if $scope.name is '' or $scope.addressRaw is ''
-		geocoder = new google.maps.Geocoder()
-		geocoder.geocode
-			address: $scope.addressRaw
-			(results, status)->
-				if status == google.maps.GeocoderStatus.OK
-					console.log results[0]
-					bestMatch = results[0]
-					window.address = bestMatch
-					$http.post '/api/jukebox',
-						name: $scope.name
-						address: bestMatch.formatted_address
-						lat: bestMatch.geometry.location.k
-						lng: bestMatch.geometry.location.D
-						info: '' # optional
-				else
-					console.log 'error finding address'
+		return if $scope.name is '' or $scope.address.formatted_address is ''
+		address = $scope.address.selected
+		$http.post '/api/jukebox',
+			name: $scope.name
+			address: address.formatted_address
+			lat: address.geometry.location.lat
+			lng: address.geometry.location.lng
+			info: '' # optional
+		.success (data)->
+			$scope.showJukebox(data)
 		
-	$scope.newSong = ''
+		
+	$scope.showJukebox = (jukebox)->
+		$state.go('jukebox_show', { slug: jukebox.slug })
+	
+	$scope.address = {}
 
-	$scope.deleteSong = (thing) ->
-		$http.delete '/api/songs/' + song._id
-
-	$scope.$on '$destroy', ->
-		socket.unsyncUpdates 'song'
-
+	$scope.refreshAddresses = (address)->
+		params =
+			address: address
+			sensor: true
+		$http.get 'http://maps.googleapis.com/maps/api/geocode/json', { params: params }
+			.then (response)->
+				$scope.addresses = response.data.results

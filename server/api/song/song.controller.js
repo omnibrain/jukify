@@ -18,6 +18,15 @@ exports.show = function(req, res) {
     if(!song) { return res.send(404); }
     return res.json(song);
   });
+}
+// Get a single song
+exports.query = function(req, res) {
+	console.log(req.body);
+  Song.find(req.body, function (err, songs) {
+    if(err) { return handleError(res, err); }
+    if(!songs) { return res.send(404); }
+    return res.json(songs);
+  });
 };
 
 // Creates a new song in the DB.
@@ -34,7 +43,9 @@ exports.update = function(req, res) {
   Song.findById(req.params.id, function (err, song) {
     if (err) { return handleError(res, err); }
     if(!song) { return res.send(404); }
+		console.log(req.body);
     var updated = _.merge(song, req.body);
+		console.log(updated);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, song);

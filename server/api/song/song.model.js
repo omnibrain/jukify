@@ -8,8 +8,10 @@ var SongSchema = new Schema({
   album: String,
 	artist: String,
 	length: Number,
-  jukebox: String,
+	uri: String,
+  _jukebox: { type: Schema.Types.ObjectId, ref: 'Jukebox' },
 	votes: { type: Number, default: 0 },
+	played: { type: Boolean, default: false },
 	date: { type: Date, default: Date.now }
 });
 

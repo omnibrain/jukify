@@ -2,7 +2,7 @@
 
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-		slug = require('slug');
+		urlslug = require('mongoose-url-slugs');
 
 var JukeboxSchema = new Schema({
   name: String,
@@ -16,8 +16,6 @@ var JukeboxSchema = new Schema({
     toJSON: { virtuals: true }
 });
 
-JukeboxSchema.virtual('slug').get( function () {
-	return slug(this.name);
-});
+JukeboxSchema.plugin(urlslug('name'));
 
 module.exports = mongoose.model('Jukebox', JukeboxSchema);
