@@ -29,8 +29,8 @@ header#banner.hero-unit
 		.col-lg-12
 			h2.page-header Join a Party Near You
 	.row
-		.col-md-4(ng-repeat='jukebox in jukeboxes')
-			.bs-callout.bs-callout-primary.bs-callout-hover(ng-click='showJukebox(jukebox)')
+		.col-md-4(ng-repeat='jukebox in jukeboxes | orderBy: "-date"')
+			.bs-callout.bs-callout-primary.bs-callout-hover.jukebox(ng-click='showJukebox(jukebox)')
 				h4
 					| {{jukebox.name}}
 				p 

@@ -1,7 +1,7 @@
 'use strict'
 
 angular.module 'jukifyApp'
-.controller 'JukeboxShowCtrl', ($scope, $http, $stateParams, socket) ->
+.controller 'JukeboxShowCtrl', ($scope, $http, $stateParams, $cookies, socket) ->
 
 	$scope.jukebox = {}
 	$scope.playlist = []
@@ -11,7 +11,6 @@ angular.module 'jukifyApp'
 			$scope.jukebox = jukebox
 			$http.post '/api/songs/q', { _jukebox: $scope.jukebox.id }
 				.success (playlist) ->
-					console.log playlist
 					$scope.playlist = playlist
 					socket.syncUpdates 'song', $scope.playlist
 	
@@ -43,5 +42,10 @@ angular.module 'jukifyApp'
 		$http.put '/api/songs/' + song._id, { played: true }
 	
 	$scope.upvote = (song)->
+		return if $cookies[song._id] # already voted!
 		$http.put '/api/songs/' + song._id, { votes: song.votes + 1 }
+		$cookies[song._id] = true
+
+	$scope.votingDisabled = (song)->
+		return $cookies[song._id] === 'true'
 

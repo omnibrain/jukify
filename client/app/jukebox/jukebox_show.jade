@@ -39,7 +39,8 @@ header#banner.hero-unit
 						p 
 							| {{song.artist}} - {{song.album}}
 					.col-md-2
-						button.btn.btn-default.pull-right(ng-click='upvote(song)')
+						p {{ $cookie[song._id] }}
+						button.btn.btn-default.pull-right(ng-click='upvote(song)', ng-class='votingDisabled(song) ? "disabled" : ""')
 							span
 								i.fa.fa-2x.fa-thumbs-up
 							span.votes(ng-class='(song.votes > 0) ? "text-success" : "text-danger"') {{song.votes}}
