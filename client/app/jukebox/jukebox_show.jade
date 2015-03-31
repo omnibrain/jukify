@@ -30,15 +30,15 @@ header#banner.hero-unit
 			h2.page-header Playlist
 			.bs-callout.bs-callout-primary.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: {played: false}')
 				.row
-					.col-md-2
+					.col-xs-2
 						img.img-circle.img-responsive(src='{{song.cover}}')
-					.col-md-8
+					.col-xs-8
 						a(href='{{song.uri}}', ng-click='playSong(song)')
 							h4
 								| {{song.title}} #[small ({{ song.length | formatMillis }})]
 						p 
 							| {{song.artist}} - {{song.album}}
-					.col-md-2
+					.col-xs-2
 						p {{ $cookie[song._id] }}
 						button.btn.btn-default.pull-right(ng-click='upvote(song)', ng-class='votingDisabled(song) ? "disabled" : ""')
 							span
@@ -48,9 +48,9 @@ header#banner.hero-unit
 			h2.page-header Played Songs
 			.bs-callout.bs-callout-default.song(ng-repeat='song in playlist | orderBy: "-votes" | filter: {played: true}')
 				.row
-					.col-md-2
+					.col-xs-2
 						img.img-circle.img-responsive(src='{{song.cover}}')
-					.col-md-10
+					.col-xs-10
 						a(href='{{song.uri}}')
 							h4
 								| {{song.title}} #[small ({{ song.length | formatMillis }})]
