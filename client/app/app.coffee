@@ -8,7 +8,7 @@ angular.module 'jukifyApp', [
 	'ui.router',
 	'ui.bootstrap',
 	'ui.select',
-	'durationFilter',
+	'customFilters',
 ]
 .config ($stateProvider, $urlRouterProvider, $locationProvider, $compileProvider) ->
 	# default url if nonexisting url is provided

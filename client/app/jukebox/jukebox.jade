@@ -28,15 +28,19 @@ header#banner.hero-unit
 	.row
 		.col-lg-12
 			h2.page-header Join a Party Near You
-	.row
-		.col-md-4(ng-repeat='jukebox in jukeboxes | orderBy: "-date"')
+	.row(ng-hide='!localized')
+		.col-md-4(ng-repeat='jukebox in jukeboxes | orderBy:distance')
 			.bs-callout.bs-callout-primary.bs-callout-hover.jukebox(ng-click='showJukebox(jukebox)')
 				h4
 					| {{jukebox.name}}
 				p 
 					| {{jukebox.address}}
 				code
-					| 27 songs, 10 voters
+					| {{ distance(jukebox) | formatDistance }} from your position
+	.row(ng-hide='localized')
+		.col-md-12.text-center
+			.loader
+			p waiting for position...
 
 footer.footer
 	.container

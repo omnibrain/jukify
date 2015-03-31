@@ -2,11 +2,22 @@
 
 angular.module 'jukifyApp'
 .controller 'JukeboxCtrl', ($scope, $http, $state, socket) ->
-	$scope.jukeboxes = []
 
-	$http.get('/api/jukebox').success (jukeboxes) ->
-		$scope.jukeboxes = jukeboxes
-		socket.syncUpdates 'jukebox', $scope.jukeboxes
+	$scope.jukeboxes = []
+	$scope.localized = false
+	$scope.position = null
+	$scope.localization_error = false
+
+	# localize the client
+	if navigator.geolocation
+		locateCallback = (position)->
+			$scope.position = position
+			$scope.localized = true
+			$http.get('/api/jukebox').success (jukeboxes) ->
+				$scope.jukeboxes = jukeboxes
+				socket.syncUpdates 'jukebox', $scope.jukeboxes
+
+		navigator.geolocation.getCurrentPosition(locateCallback)
 
 	$scope.addJukebox = ->
 		return if $scope.name is '' or $scope.address.formatted_address is ''
@@ -33,3 +44,8 @@ angular.module 'jukifyApp'
 		$http.get 'http://maps.googleapis.com/maps/api/geocode/json', { params: params }
 			.then (response)->
 				$scope.addresses = response.data.results
+
+	$scope.distance = (jukebox)->
+		from = new google.maps.LatLng(jukebox.lat, jukebox.lng)
+		to   = new google.maps.LatLng($scope.position.coords.latitude, $scope.position.coords.longitude)
+		return google.maps.geometry.spherical.computeDistanceBetween(from, to)

@@ -47,5 +47,5 @@ angular.module 'jukifyApp'
 		$cookies[song._id] = true
 
 	$scope.votingDisabled = (song)->
-		return $cookies[song._id] === 'true'
+		return $cookies[song._id] == 'true'
 
