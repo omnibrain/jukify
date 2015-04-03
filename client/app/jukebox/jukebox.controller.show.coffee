@@ -1,20 +1,37 @@
 'use strict'
 
 angular.module 'jukifyApp'
-.controller 'JukeboxShowCtrl', ($scope, $http, $stateParams, $cookies, socket) ->
+.controller 'JukeboxShowCtrl', ($rootScope, $scope, $http, $stateParams, $cookies, socket, geoUtils, settings) ->
 
 	$scope.jukebox = {}
 	$scope.playlist = []
+	$scope.song = {} # for autocompletion
+	$scope.closeEnough = false
+	$scope.located = false
 
 	$http.post '/api/jukebox/q', { slug: $stateParams.slug }
 		.success (jukebox) ->
 			$scope.jukebox = jukebox
-			$http.post '/api/songs/q', { _jukebox: $scope.jukebox.id }
-				.success (playlist) ->
-					$scope.playlist = playlist
-					socket.syncUpdates 'song', $scope.playlist
-	
-	$scope.song = {}
+			$scope.checkDistance jukebox
+			$scope.getPlaylist jukebox
+
+	$scope.checkDistance = (jukebox)->
+		# localize the client
+		geoUtils.getPosition (position)->
+			$scope.closeEnough = geoUtils.distance(jukebox) < settings.maxVotingDistance
+
+			# bad practice, i know.
+			if !$scope.$$phase
+				$scope.$apply ->
+					$scope.located = true
+			else
+				$scope.located = true
+
+	$scope.getPlaylist = (jukebox)->
+		$http.post '/api/songs/q', { _jukebox: $scope.jukebox.id }
+			.success (playlist) ->
+				$scope.playlist = playlist
+				socket.syncUpdates 'song', $scope.playlist
 
 	$scope.refreshSongs = (song)->
 		return if song.length < 2
@@ -47,5 +64,5 @@ angular.module 'jukifyApp'
 		$cookies[song._id] = true
 
 	$scope.votingDisabled = (song)->
-		return $cookies[song._id] == 'true'
+		return $cookies[song._id] == 'true' or !$scope.closeEnough
 

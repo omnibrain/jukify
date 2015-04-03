@@ -19,3 +19,7 @@ angular.module 'jukifyApp', [
 	$locationProvider.html5Mode true
 
 	$compileProvider.aHrefSanitizationWhitelist /^\s*(https?|mailto|spotify):/
+.constant 'settings',
+	maxDistance: 5000 # in m
+	maxVotingDistance: 200 # in m
+	

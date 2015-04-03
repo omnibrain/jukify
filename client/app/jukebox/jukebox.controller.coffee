@@ -1,20 +1,18 @@
 'use strict'
 
 angular.module 'jukifyApp'
-.controller 'JukeboxCtrl', ($scope, $http, $state, socket) ->
-
-	MAX_DISTANCE = 5000 # in m
-	MAX_VOTE_DISTANCE = 100 # in m
+.controller 'JukeboxCtrl', ($rootScope, $scope, $http, $state, socket, geoUtils, settings) ->
 
 	$scope.jukeboxes = []
 	$scope.localized = false
 	$scope.position = null
+	$scope.closeParty = null
 
 	$scope.address = {} # autocompletion
 
 	$scope.addRangeCircle = (position)->
 		options =
-			radius: MAX_VOTE_DISTANCE
+			radius: settings.maxVotingDistance
 			center: { lat: position.coords.latitude, lng: position.coords.longitude }
 			map: $scope.map
 			strokeWeight: 1
@@ -27,10 +25,10 @@ angular.module 'jukifyApp'
 		# single info window instance
 		infowindow = new google.maps.InfoWindow
 
-		# filter jukeboxes: only display jukeboxes closer than MAX_DISTANCE meters
+		# filter jukeboxes: only display jukeboxes closer than settings.maxDistance meters
 		close_jukeboxes = _.filter jukeboxes, (jukebox)->
-			MAX_DISTANCE > $scope.distance jukebox
-			
+			settings.maxDistance > $scope.distance jukebox
+
 		_.each close_jukeboxes, (jukebox)->
 
 			# create marker
@@ -42,8 +40,16 @@ angular.module 'jukifyApp'
 			# marker click event
 			google.maps.event.addListener marker, 'click', (e)->
 				infowindow.close()
-				infowindow.setContent "<strong>#{jukebox.name}</strong><br>#{jukebox.address}"
+				infowindow.setContent "<strong>#{jukebox.name}</strong><br>#{jukebox.address}<br><a href='/jukebox/#{jukebox.slug}'>Join this Party!</a>"
 				infowindow.open $scope.map, marker
+
+		# find closest party
+		closestParty = _.min jukeboxes, $scope.distance
+		if $scope.distance(closestParty) < settings.maxVotingDistance then $scope.closeParty = closestParty
+
+
+	$scope.closePartyAlert = (jukebox)->
+		$scope.closeParty = jukebox
 
 
 	$scope.getJukeboxes = ->
@@ -92,6 +98,6 @@ angular.module 'jukifyApp'
 
 
 
-	# localize the client
-	if navigator.geolocation
-		navigator.geolocation.getCurrentPosition($scope.locateCallback)
+	$scope.$on 'mapInitialized', ->
+		# localize the client
+		geoUtils.getPosition $scope.locateCallback

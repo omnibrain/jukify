@@ -52,10 +52,6 @@
     </script>
 
 		<!-- Google Maps Api -->
-		<script src="http://maps.google.com/maps/api/js?v=3.exp&libraries=geometry&signed_in=true&callback=initialize"></script>
-		<script>
-			function initialize() { window.google = google; }
-		</script>
 
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -77,6 +73,7 @@
       <script src="bower_components/selectize/dist/js/selectize.js"></script>
       <script src="bower_components/angular-ui-select/dist/select.js"></script>
       <script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
+      <script src="bower_components/geolib/dist/geolib.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
@@ -84,6 +81,7 @@
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
           <!-- injector:js -->
+          <script src="app/geoUtils/geoUtils.js"></script>
           <script src="app/jukebox/jukebox.js"></script>
           <script src="app/main/main.js"></script>
           <script src="components/modal/modal.js"></script>
