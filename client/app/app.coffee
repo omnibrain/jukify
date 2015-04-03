@@ -9,6 +9,7 @@ angular.module 'jukifyApp', [
 	'ui.bootstrap',
 	'ui.select',
 	'customFilters',
+	'ngMap',
 ]
 .config ($stateProvider, $urlRouterProvider, $locationProvider, $compileProvider) ->
 	# default url if nonexisting url is provided

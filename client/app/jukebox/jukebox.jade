@@ -28,9 +28,14 @@ header#header.hero-unit
 	.row
 		.col-lg-12
 			h2.page-header Join a Party Near You
+	.row
+		.col-lg-12
+			map.map(zoom='12')
+				marker(ng-repeat='jukebox in jukeboxes', position='[jukebox.lat, jukebox.lng]', visible='true')
+			hr
 	.row(ng-hide='!localized')
-		.col-md-4(ng-repeat='jukebox in jukeboxes | orderBy:distance')
-			.bs-callout.bs-callout-primary.bs-callout-hover.jukebox(ng-click='showJukebox(jukebox)')
+		.col-md-4(ng-repeat='jukebox in jukeboxes | orderBy:distance | limitTo: 18')
+			.bs-callout.bs-callout-hover.jukebox(ng-click='showJukebox(jukebox)', ng-class='(distance(jukebox) < 200) ? "bs-callout-success" : "bs-callout-primary"')
 				h4
 					| {{jukebox.name}}
 				p 
