@@ -1,5 +1,7 @@
 ### Jukify - Democrating Partying
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/omnibrain/jukify.svg)](https://greenkeeper.io/)
+
 Web app that allows creating a jukebox where people can upvote songs they want to hear.
 
 #### Dependencies
